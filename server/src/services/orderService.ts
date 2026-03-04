@@ -75,12 +75,12 @@ export class OrderService {
 
         // Fetch Dynamic CMS Configs
         const cmsSettings = await StoreSettings.findOne();
-        const currentTaxRate = cmsSettings?.defaultTaxPercentage ? (cmsSettings.defaultTaxPercentage / 100) : TAX_RATE;
+        const currentTaxRate = cmsSettings?.defaultTaxPercentage !== undefined ? (cmsSettings.defaultTaxPercentage / 100) : TAX_RATE;
         const currentShippingFee = cmsSettings?.defaultShippingCost !== undefined ? cmsSettings.defaultShippingCost : SHIPPING_FEE;
 
         const afterDiscount = subtotal - discountAmount;
         const taxPrice = Math.round(afterDiscount * currentTaxRate * 100) / 100;
-        const shippingPrice = afterDiscount >= FREE_SHIPPING_THRESHOLD ? 0 : currentShippingFee;
+        const shippingPrice = afterDiscount === 0 ? 0 : currentShippingFee;
         const totalPrice =
             Math.round((afterDiscount + taxPrice + shippingPrice) * 100) / 100;
 
@@ -170,12 +170,25 @@ export class OrderService {
             );
         }
 
-        // If cancelling, restore stock
+        // Manage sale counts and stock based on confirmed status
+        if (status === OrderStatus.CONFIRMED && order.status === OrderStatus.PENDING) {
+            for (const item of order.orderItems) {
+                const productId = (item.product as any)._id?.toString() || (item.product as any).toString();
+                await productRepository.updateById(productId, {
+                    $inc: { sold: item.quantity },
+                } as any);
+            }
+        }
+
+        // If cancelling, restore stock, and reverse sale count if we had already confirmed it
         if (status === OrderStatus.CANCELLED) {
             for (const item of order.orderItems) {
-                await productRepository.updateById(item.product.toString(), {
-                    $inc: { stock: item.quantity, sold: -item.quantity },
-                } as any);
+                const productId = (item.product as any)._id?.toString() || (item.product as any).toString();
+                const stockUpdate: any = { $inc: { stock: item.quantity } };
+                if (order.status !== OrderStatus.PENDING) {
+                    stockUpdate.$inc.sold = -item.quantity;
+                }
+                await productRepository.updateById(productId, stockUpdate);
             }
         }
 

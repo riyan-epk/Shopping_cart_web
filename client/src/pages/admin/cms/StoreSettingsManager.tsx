@@ -57,7 +57,7 @@ const StoreSettingsManager: React.FC<StoreSettingsManagerProps> = ({ onUpdate })
                 </div>
                 <div>
                     <label className="block text-sm font-semibold mb-2" style={{ color: 'var(--text-secondary)' }}>Currency Symbol</label>
-                    <input type="text" name="currencySymbol" value={settings.currencySymbol || '$'} onChange={handleChange} className="w-full px-4 py-3 bg-surface-50 dark:bg-surface-800 rounded-xl text-sm border-0 focus:ring-2 focus:ring-primary-500 transition-all outline-none" style={{ color: 'var(--text-primary)' }} placeholder="e.g. $ or Rs" required />
+                    <input type="text" name="currencySymbol" value={settings.currencySymbol ?? ''} onChange={handleChange} className="w-full px-4 py-3 bg-surface-50 dark:bg-surface-800 rounded-xl text-sm border-0 focus:ring-2 focus:ring-primary-500 transition-all outline-none" style={{ color: 'var(--text-primary)' }} placeholder="e.g. $ or Rs" required />
                 </div>
                 <div>
                     <label className="block text-sm font-semibold mb-2" style={{ color: 'var(--text-secondary)' }}>Contact Email</label>
@@ -80,12 +80,12 @@ const StoreSettingsManager: React.FC<StoreSettingsManagerProps> = ({ onUpdate })
                     <input type="text" name="copyrightText" value={settings.copyrightText || ''} onChange={handleChange} className="w-full px-4 py-3 bg-surface-50 dark:bg-surface-800 rounded-xl text-sm border-0 focus:ring-2 focus:ring-primary-500 transition-all outline-none" style={{ color: 'var(--text-primary)' }} />
                 </div>
                 <div>
-                    <label className="block text-sm font-semibold mb-2" style={{ color: 'var(--text-secondary)' }}>Default Shipping Cost ($)</label>
-                    <input type="number" name="defaultShippingCost" value={settings.defaultShippingCost || 0} onChange={handleChange} className="w-full px-4 py-3 bg-surface-50 dark:bg-surface-800 rounded-xl text-sm border-0 focus:ring-2 focus:ring-primary-500 transition-all outline-none" style={{ color: 'var(--text-primary)' }} />
+                    <label className="block text-sm font-semibold mb-2" style={{ color: 'var(--text-secondary)' }}>Default Shipping Cost</label>
+                    <input type="number" name="defaultShippingCost" value={settings.defaultShippingCost ?? ''} onChange={handleChange} className="w-full px-4 py-3 bg-surface-50 dark:bg-surface-800 rounded-xl text-sm border-0 focus:ring-2 focus:ring-primary-500 transition-all outline-none" style={{ color: 'var(--text-primary)' }} />
                 </div>
                 <div>
                     <label className="block text-sm font-semibold mb-2" style={{ color: 'var(--text-secondary)' }}>Default Tax Percentage (%)</label>
-                    <input type="number" name="defaultTaxPercentage" value={settings.defaultTaxPercentage || 0} onChange={handleChange} className="w-full px-4 py-3 bg-surface-50 dark:bg-surface-800 rounded-xl text-sm border-0 focus:ring-2 focus:ring-primary-500 transition-all outline-none" style={{ color: 'var(--text-primary)' }} />
+                    <input type="number" name="defaultTaxPercentage" value={settings.defaultTaxPercentage ?? ''} onChange={handleChange} className="w-full px-4 py-3 bg-surface-50 dark:bg-surface-800 rounded-xl text-sm border-0 focus:ring-2 focus:ring-primary-500 transition-all outline-none" style={{ color: 'var(--text-primary)' }} />
                 </div>
             </div>
 

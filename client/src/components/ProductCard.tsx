@@ -47,7 +47,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
         <motion.div
             whileHover={{ y: -8 }}
             transition={{ duration: 0.3, ease: 'easeOut' }}
-            className="group relative flex flex-col h-full bg-white dark:bg-surface-800 rounded-[2rem] overflow-hidden border transition-all duration-300 hover:bg-slate-50 dark:hover:bg-surface-700/50 hover:shadow-2xl hover:shadow-primary-500/20"
+            className="group relative flex flex-col h-full bg-white dark:bg-surface-800 rounded-3xl sm:rounded-[2rem] overflow-hidden border transition-all duration-300 hover:bg-slate-50 dark:hover:bg-surface-700/50 hover:shadow-2xl hover:shadow-primary-500/20"
             style={{ borderColor: 'var(--border-color)' }}
         >
             <Link to={`/products/${product.slug}`} className="flex flex-col h-full">
@@ -98,9 +98,9 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
                 </div>
 
                 {/* Content Section */}
-                <div className="p-6 flex flex-col flex-grow">
+                <div className="p-4 sm:p-6 flex flex-col flex-grow">
                     {/* Category Label */}
-                    <div className="mb-2">
+                    <div className="mb-1 sm:mb-2">
                         {typeof product.category === 'object' && product.category && (
                             <span className="text-[10px] font-extrabold uppercase tracking-[0.2em] text-primary-500">
                                 {(product.category as any).name}
@@ -109,7 +109,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
                     </div>
 
                     {/* Title */}
-                    <h3 className="font-bold text-base mb-3 line-clamp-2 leading-tight tracking-tight group-hover:text-primary-500 transition-colors" style={{ color: 'var(--text-primary)' }}>
+                    <h3 className="font-bold text-sm sm:text-base mb-2 sm:mb-3 line-clamp-2 leading-tight tracking-tight group-hover:text-primary-500 transition-colors" style={{ color: 'var(--text-primary)' }}>
                         {product.name}
                     </h3>
 
@@ -119,15 +119,15 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
                             <HiOutlineStar className="w-3 h-3 fill-current" />
                             <span className="text-[11px] font-bold">{product.ratings.toFixed(1)}</span>
                         </div>
-                        <span className="text-[11px] font-medium opacity-40" style={{ color: 'var(--text-secondary)' }}>
-                            ({product.numReviews} Reviews)
+                        <span className="text-[10px] sm:text-[11px] font-medium opacity-40" style={{ color: 'var(--text-secondary)' }}>
+                            ({product.numReviews} <span className="hidden xs:inline">Reviews</span>)
                         </span>
                     </div>
 
                     {/* Price & Cart Footer */}
                     <div className="mt-auto flex flex-col gap-4">
-                        <div className="flex items-baseline gap-2">
-                            <span className="text-xl font-extrabold tracking-tight text-primary-500">
+                        <div className="flex items-baseline gap-1.5 sm:gap-2">
+                            <span className="text-lg sm:text-xl font-extrabold tracking-tight text-primary-500 truncate">
                                 {currencySymbol}{product.finalPrice.toFixed(2)}
                             </span>
                             {product.discountPercentage > 0 && (
@@ -140,10 +140,11 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
                         {inStock && (
                             <button
                                 onClick={handleAddToCart}
-                                className="group/btn w-full flex items-center justify-center gap-2 h-12 rounded-2xl text-xs font-bold uppercase tracking-widest bg-primary-600 text-white hover:bg-primary-700 transition-all active:scale-[0.98] shadow-lg shadow-primary-500/10"
+                                className="group/btn w-full flex items-center justify-center gap-1.5 sm:gap-2 h-10 sm:h-12 rounded-xl sm:rounded-2xl text-[10px] sm:text-xs font-bold uppercase tracking-widest bg-primary-600 text-white hover:bg-primary-700 transition-all active:scale-[0.98] shadow-lg shadow-primary-500/10"
                             >
-                                <HiOutlineShoppingCart className="w-4 h-4 group-hover/btn:scale-110 transition-transform" />
-                                Add To Cart
+                                <HiOutlineShoppingCart className="w-3.5 h-3.5 sm:w-4 sm:h-4 group-hover/btn:scale-110 transition-transform" />
+                                <span className="hidden xs:inline">Add To Cart</span>
+                                <span className="xs:hidden">Add</span>
                             </button>
                         )}
                     </div>

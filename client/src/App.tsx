@@ -56,8 +56,8 @@ const App: React.FC = () => {
     <QueryClientProvider client={queryClient}>
       <ThemeProvider>
         <AuthProvider>
-          <CartProvider>
-            <CmsProvider>
+          <CmsProvider>
+            <CartProvider>
               <WishlistProvider>
                 <BrowserRouter>
                   <ScrollToTop />
@@ -135,11 +135,11 @@ const App: React.FC = () => {
                   },
                 }}
               />
-            </CmsProvider>
-          </CartProvider>
+            </CartProvider>
+          </CmsProvider>
         </AuthProvider>
       </ThemeProvider>
-    </QueryClientProvider>
+    </QueryClientProvider >
   );
 };
 

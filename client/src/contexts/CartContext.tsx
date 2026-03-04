@@ -52,18 +52,25 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
     // Default constants if CMS not loaded
     const DEFAULT_TAX_RATE = 0.05;
     const DEFAULT_SHIPPING_FEE = 10;
-    const FREE_SHIPPING_THRESHOLD = 100;
 
-    // Use CMS values if available
-    const activeTaxRate = store?.defaultTaxPercentage !== undefined ? (store.defaultTaxPercentage / 100) : DEFAULT_TAX_RATE;
-    const activeShippingFee = store?.defaultShippingCost !== undefined ? store.defaultShippingCost : DEFAULT_SHIPPING_FEE;
+    // Use CMS values if available — ensure numbers are parsed correctly
+    const activeTaxRate = store?.defaultTaxPercentage !== undefined
+        ? (Number(store.defaultTaxPercentage) / 100)
+        : DEFAULT_TAX_RATE;
+
+    const activeShippingFee = store?.defaultShippingCost !== undefined
+        ? Number(store.defaultShippingCost)
+        : DEFAULT_SHIPPING_FEE;
 
     // Calculate derived values
     const itemCount = items.reduce((sum, item) => sum + item.quantity, 0);
     const subtotal = items.reduce((sum, item) => sum + item.price * item.quantity, 0);
     const afterCoupon = Math.max(0, subtotal - couponDiscount);
     const taxAmount = Math.round(afterCoupon * activeTaxRate * 100) / 100;
-    const shippingFee = (afterCoupon >= FREE_SHIPPING_THRESHOLD || afterCoupon === 0) ? 0 : activeShippingFee;
+
+    // Shipping: free when cart is empty, otherwise use admin's fee (0 = free shipping always)
+    const shippingFee = afterCoupon === 0 ? 0 : activeShippingFee;
+
     const total = Math.round((afterCoupon + taxAmount + shippingFee) * 100) / 100;
     const currencySymbol = store?.currencySymbol || '$';
 

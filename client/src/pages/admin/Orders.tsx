@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { orderApi } from '../../api';
+import { useCms } from '../../contexts/CmsContext';
 import type { Order } from '../../types';
 import toast from 'react-hot-toast';
 
@@ -21,6 +22,9 @@ const AdminOrders: React.FC = () => {
     const [total, setTotal] = useState(0);
     const [filterStatus, setFilterStatus] = useState('');
     const [expandedOrder, setExpandedOrder] = useState<string | null>(null);
+
+    const { config } = useCms();
+    const currencySymbol = config?.storeSettings?.currencySymbol || '$';
 
     const fetchOrders = () => {
         setLoading(true);
@@ -66,7 +70,7 @@ const AdminOrders: React.FC = () => {
                             </div>
                             <div className="flex items-center gap-3">
                                 <span className={`px-3 py-1 text-xs font-medium rounded-full ${statusColor(order.status)}`}>{order.status}</span>
-                                <span className="font-bold">${order.totalPrice.toFixed(2)}</span>
+                                <span className="font-bold">{currencySymbol}{order.totalPrice.toFixed(2)}</span>
                             </div>
                         </div>
 
@@ -80,7 +84,7 @@ const AdminOrders: React.FC = () => {
                                                 <img src={item.image || 'https://via.placeholder.com/32'} alt="" className="w-8 h-8 rounded-lg object-cover" />
                                                 <span>{item.name} × {item.quantity}</span>
                                             </div>
-                                            <span className="font-medium">${(item.price * item.quantity).toFixed(2)}</span>
+                                            <span className="font-medium">{currencySymbol}{(item.price * item.quantity).toFixed(2)}</span>
                                         </div>
                                     ))}
                                 </div>

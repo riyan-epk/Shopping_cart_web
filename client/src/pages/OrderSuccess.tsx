@@ -3,10 +3,12 @@ import { useParams, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { HiOutlineCheck, HiOutlineShoppingBag } from 'react-icons/hi';
 import { orderApi } from '../api';
+import { useCart } from '../contexts/CartContext';
 import type { Order } from '../types';
 
 const OrderSuccess: React.FC = () => {
     const { id } = useParams<{ id: string }>();
+    const { currencySymbol } = useCart();
     const [order, setOrder] = useState<Order | null>(null);
 
     useEffect(() => {
@@ -37,17 +39,17 @@ const OrderSuccess: React.FC = () => {
                             {order.orderItems.map((item, i) => (
                                 <div key={i} className="flex justify-between">
                                     <span style={{ color: 'var(--text-secondary)' }}>{item.name} × {item.quantity}</span>
-                                    <span className="font-medium">${(item.price * item.quantity).toFixed(2)}</span>
+                                    <span className="font-medium">{currencySymbol}{(item.price * item.quantity).toFixed(2)}</span>
                                 </div>
                             ))}
                             <div className="pt-2 mt-2" style={{ borderTop: '1px solid var(--border-color)' }}>
-                                <div className="flex justify-between"><span style={{ color: 'var(--text-secondary)' }}>Subtotal</span><span>${order.subtotal.toFixed(2)}</span></div>
-                                {order.discountAmount > 0 && <div className="flex justify-between text-success-500"><span>Discount</span><span>-${order.discountAmount.toFixed(2)}</span></div>}
-                                <div className="flex justify-between"><span style={{ color: 'var(--text-secondary)' }}>Tax</span><span>${order.taxPrice.toFixed(2)}</span></div>
-                                <div className="flex justify-between"><span style={{ color: 'var(--text-secondary)' }}>Shipping</span><span>{order.shippingPrice === 0 ? 'Free' : `$${order.shippingPrice.toFixed(2)}`}</span></div>
+                                <div className="flex justify-between"><span style={{ color: 'var(--text-secondary)' }}>Subtotal</span><span>{currencySymbol}{order.subtotal.toFixed(2)}</span></div>
+                                {order.discountAmount > 0 && <div className="flex justify-between text-success-500"><span>Discount</span><span>-{currencySymbol}{order.discountAmount.toFixed(2)}</span></div>}
+                                <div className="flex justify-between"><span style={{ color: 'var(--text-secondary)' }}>Tax</span><span>{currencySymbol}{order.taxPrice.toFixed(2)}</span></div>
+                                <div className="flex justify-between"><span style={{ color: 'var(--text-secondary)' }}>Shipping</span><span>{order.shippingPrice === 0 ? 'Free' : `${currencySymbol}${order.shippingPrice.toFixed(2)}`}</span></div>
                             </div>
                             <div className="flex justify-between pt-2 text-lg font-bold" style={{ borderTop: '1px solid var(--border-color)' }}>
-                                <span>Total</span><span className="text-primary-600">${order.totalPrice.toFixed(2)}</span>
+                                <span>Total</span><span className="text-primary-600">{currencySymbol}{order.totalPrice.toFixed(2)}</span>
                             </div>
                         </div>
                     </div>

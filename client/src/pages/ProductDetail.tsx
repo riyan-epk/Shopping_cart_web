@@ -5,6 +5,7 @@ import { HiOutlineShoppingCart, HiOutlineStar, HiOutlineMinus, HiOutlinePlus, Hi
 import { productApi, reviewApi } from '../api';
 import { useCart } from '../contexts/CartContext';
 import { useWishlist } from '../contexts/WishlistContext';
+import { useCms } from '../contexts/CmsContext';
 import type { Product, LocalCartItem } from '../types';
 import toast from 'react-hot-toast';
 import ProductCard from '../components/ProductCard';
@@ -15,6 +16,8 @@ const ProductDetail: React.FC = () => {
     const { slug } = useParams<{ slug: string }>();
     const { addToCart, currencySymbol } = useCart();
     const { toggleWishlist, isInWishlist } = useWishlist();
+    const { config } = useCms();
+    const shippingCost = config?.storeSettings?.defaultShippingCost ?? 10;
 
     const [product, setProduct] = useState<Product | null>(null);
     const [related, setRelated] = useState<Product[]>([]);
@@ -223,11 +226,13 @@ const ProductDetail: React.FC = () => {
                     </div>
 
                     {/* Shipping info */}
-                    <div className="p-4 rounded-2xl flex items-center gap-3" style={{ backgroundColor: 'var(--bg-secondary)', border: '1px solid var(--border-color)' }}>
-                        <HiOutlineTruck className="w-6 h-6 text-primary-500" />
+                    <div className="p-4 rounded-2xl flex items-center gap-3 mt-4" style={{ backgroundColor: 'var(--bg-secondary)', border: '1px solid var(--border-color)' }}>
+                        <HiOutlineTruck className="w-6 h-6 shrink-0 text-primary-500" />
                         <div>
-                            <p className="text-sm font-medium">Free shipping on orders over {currencySymbol}100</p>
-                            <p className="text-xs" style={{ color: 'var(--text-muted)' }}>Standard delivery: 3-5 business days</p>
+                            <p className="text-sm font-medium">
+                                {shippingCost === 0 ? 'Free Shipping Available' : `Shipping calculated at checkout (Est. ${currencySymbol}${shippingCost.toFixed(2)})`}
+                            </p>
+                            <p className="text-xs mt-0.5" style={{ color: 'var(--text-muted)' }}>Standard delivery: 3-5 business days</p>
                         </div>
                     </div>
                 </motion.div>

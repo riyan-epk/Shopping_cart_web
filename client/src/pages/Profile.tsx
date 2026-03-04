@@ -2,11 +2,13 @@ import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { HiOutlineShoppingBag } from 'react-icons/hi';
 import { useAuth } from '../contexts/AuthContext';
+import { useCart } from '../contexts/CartContext';
 import { orderApi } from '../api';
 import type { Order } from '../types';
 
 const Profile: React.FC = () => {
     const { user } = useAuth();
+    const { currencySymbol } = useCart();
     const [orders, setOrders] = useState<Order[]>([]);
     const [loading, setLoading] = useState(true);
 
@@ -71,7 +73,7 @@ const Profile: React.FC = () => {
                                 </div>
                                 <div className="flex items-center gap-3">
                                     <span className={`px-3 py-1 text-xs font-medium rounded-full ${statusColor(order.status)}`}>{order.status}</span>
-                                    <span className="font-bold">${order.totalPrice.toFixed(2)}</span>
+                                    <span className="font-bold">{currencySymbol}{order.totalPrice.toFixed(2)}</span>
                                 </div>
                             </div>
                             <div className="flex gap-2 overflow-x-auto">

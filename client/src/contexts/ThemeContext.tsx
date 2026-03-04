@@ -18,11 +18,19 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     });
 
     useEffect(() => {
-        const root = document.documentElement;
+        const html = document.documentElement;
+        const body = document.body;
+        const meta = document.getElementById('theme-color-meta') as HTMLMetaElement | null;
         if (theme === 'dark') {
-            root.classList.add('dark');
+            html.classList.add('dark');
+            body.classList.add('dark');
+            html.style.colorScheme = 'dark';
+            if (meta) meta.content = '#0f172a';
         } else {
-            root.classList.remove('dark');
+            html.classList.remove('dark');
+            body.classList.remove('dark');
+            html.style.colorScheme = 'light';
+            if (meta) meta.content = '#ffffff';
         }
         localStorage.setItem('theme', theme);
     }, [theme]);

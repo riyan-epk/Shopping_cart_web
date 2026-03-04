@@ -4,10 +4,31 @@
 <head>
   <meta charset="UTF-8" />
   <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <!-- Correct mobile viewport — disables user-zoom scaling issues -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <meta name="description"
     content="ShopCart — Premium e-commerce platform with the best deals on electronics, fashion, and more." />
+  <meta name="theme-color" content="#ffffff" id="theme-color-meta" />
   <title>ShopCart — Premium Online Shopping</title>
+
+  <!-- Inline script: Apply saved theme BEFORE React renders to avoid flash of wrong theme -->
+  <script>
+    (function () {
+      try {
+        var saved = localStorage.getItem('theme');
+        var prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        var isDark = saved === 'dark' || (!saved && prefersDark);
+        if (isDark) {
+          document.documentElement.classList.add('dark');
+          document.documentElement.style.colorScheme = 'dark';
+          var meta = document.getElementById('theme-color-meta');
+          if (meta) meta.setAttribute('content', '#0f172a');
+        } else {
+          document.documentElement.style.colorScheme = 'light';
+        }
+      } catch (e) { }
+    })();
+  </script>
 </head>
 
 <body>

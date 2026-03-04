@@ -4,6 +4,7 @@ import { motion } from 'framer-motion';
 import { z } from 'zod';
 import { HiOutlineCheck, HiOutlineTruck, HiOutlineClipboardList, HiOutlineCreditCard } from 'react-icons/hi';
 import { useCart } from '../contexts/CartContext';
+import { useCms } from '../contexts/CmsContext';
 import { orderApi } from '../api';
 import toast from 'react-hot-toast';
 import type { ShippingAddress } from '../types';
@@ -24,7 +25,9 @@ const steps = [
 ];
 
 const Checkout: React.FC = () => {
-    const { items, subtotal, couponDiscount, couponCode, taxAmount, shippingFee, total, clearCart } = useCart();
+    const { items, subtotal, couponDiscount, couponCode, taxAmount, shippingFee, total, clearCart, currencySymbol } = useCart();
+    const { config } = useCms();
+    const taxRate = config?.storeSettings?.defaultTaxPercentage ?? 5;
     const navigate = useNavigate();
     const [step, setStep] = useState(0);
     const [submitting, setSubmitting] = useState(false);
@@ -133,9 +136,9 @@ const Checkout: React.FC = () => {
                                             <img src={item.image || 'https://via.placeholder.com/48'} alt="" className="w-12 h-12 rounded-lg object-cover" />
                                             <div className="flex-1 min-w-0">
                                                 <p className="text-sm font-medium truncate">{item.name}</p>
-                                                <p className="text-xs" style={{ color: 'var(--text-muted)' }}>Qty: {item.quantity} × ${item.price.toFixed(2)}</p>
+                                                <p className="text-xs" style={{ color: 'var(--text-muted)' }}>Qty: {item.quantity} × {currencySymbol}{item.price.toFixed(2)}</p>
                                             </div>
-                                            <span className="text-sm font-bold">${(item.price * item.quantity).toFixed(2)}</span>
+                                            <span className="text-sm font-bold">{currencySymbol}{(item.price * item.quantity).toFixed(2)}</span>
                                         </div>
                                     ))}
                                 </div>
@@ -163,7 +166,7 @@ const Checkout: React.FC = () => {
                                     disabled={submitting}
                                     className="w-full py-4 bg-primary-500 text-white font-semibold rounded-2xl hover:bg-primary-600 hover:shadow-xl transition-all disabled:opacity-50"
                                 >
-                                    {submitting ? 'Placing Order...' : `Place Order — $${total.toFixed(2)}`}
+                                    {submitting ? 'Placing Order...' : `Place Order — ${currencySymbol}${total.toFixed(2)}`}
                                 </button>
                             </div>
                         )}
@@ -189,13 +192,13 @@ const Checkout: React.FC = () => {
                     <div className="sticky top-24 p-6 rounded-2xl space-y-3" style={{ backgroundColor: 'var(--bg-card)', border: '1px solid var(--border-color)' }}>
                         <h3 className="text-lg font-bold">Summary</h3>
                         <div className="text-sm space-y-2">
-                            <div className="flex justify-between"><span style={{ color: 'var(--text-secondary)' }}>Items ({items.reduce((s, i) => s + i.quantity, 0)})</span><span>${subtotal.toFixed(2)}</span></div>
-                            {couponDiscount > 0 && <div className="flex justify-between text-success-500"><span>Discount</span><span>-${couponDiscount.toFixed(2)}</span></div>}
-                            <div className="flex justify-between"><span style={{ color: 'var(--text-secondary)' }}>Tax</span><span>${taxAmount.toFixed(2)}</span></div>
-                            <div className="flex justify-between"><span style={{ color: 'var(--text-secondary)' }}>Shipping</span><span>{shippingFee === 0 ? 'Free' : `$${shippingFee.toFixed(2)}`}</span></div>
+                            <div className="flex justify-between"><span style={{ color: 'var(--text-secondary)' }}>Items ({items.reduce((s, i) => s + i.quantity, 0)})</span><span>{currencySymbol}{subtotal.toFixed(2)}</span></div>
+                            {couponDiscount > 0 && <div className="flex justify-between text-success-500"><span>Discount</span><span>-{currencySymbol}{couponDiscount.toFixed(2)}</span></div>}
+                            <div className="flex justify-between"><span style={{ color: 'var(--text-secondary)' }}>Tax ({taxRate}%)</span><span>{currencySymbol}{taxAmount.toFixed(2)}</span></div>
+                            <div className="flex justify-between"><span style={{ color: 'var(--text-secondary)' }}>Shipping</span><span>{shippingFee === 0 ? <span className="text-success-500">Free</span> : `${currencySymbol}${shippingFee.toFixed(2)}`}</span></div>
                         </div>
                         <div className="flex justify-between pt-3 text-lg font-bold" style={{ borderTop: '1px solid var(--border-color)' }}>
-                            <span>Total</span><span className="text-primary-600">${total.toFixed(2)}</span>
+                            <span>Total</span><span className="text-primary-600">{currencySymbol}{total.toFixed(2)}</span>
                         </div>
                     </div>
                 </div>

@@ -87,14 +87,21 @@ export class OrderRepository {
         totalOrders: number;
         monthlyRevenue: any[];
     }> {
+        const activeStatuses = [
+            OrderStatus.CONFIRMED,
+            OrderStatus.PROCESSING,
+            OrderStatus.SHIPPED,
+            OrderStatus.DELIVERED
+        ];
+
         const [revenueResult, totalOrders, monthlyRevenue] = await Promise.all([
             Order.aggregate([
-                { $match: { status: { $ne: OrderStatus.CANCELLED } } },
+                { $match: { status: { $in: activeStatuses } } },
                 { $group: { _id: null, total: { $sum: '$totalPrice' } } },
             ]),
-            Order.countDocuments(),
+            Order.countDocuments({ status: { $in: activeStatuses } }),
             Order.aggregate([
-                { $match: { status: { $ne: OrderStatus.CANCELLED } } },
+                { $match: { status: { $in: activeStatuses } } },
                 {
                     $group: {
                         _id: {

@@ -21,7 +21,7 @@ const Home: React.FC = () => {
     const store = config?.storeSettings || {};
 
     const features = [
-        { icon: HiOutlineTruck, title: 'Free Shipping', desc: `On orders over ${currencySymbol}100` },
+        { icon: HiOutlineTruck, title: store.defaultShippingCost === 0 ? 'Free Shipping' : 'Fast Shipping', desc: store.defaultShippingCost === 0 ? 'On all orders' : `Starting at ${currencySymbol}${store.defaultShippingCost || '10'}` },
         { icon: HiOutlineShieldCheck, title: 'Secure Payment', desc: '100% secure checkout' },
         { icon: HiOutlineRefresh, title: 'Easy Returns', desc: '30-day return policy' },
         { icon: HiOutlineChatAlt2, title: '24/7 Support', desc: 'Dedicated support team' },
@@ -69,9 +69,9 @@ const Home: React.FC = () => {
                                 {hero.badgeText}
                             </div>
                         )}
-                        <h1 className="text-5xl md:text-6xl lg:text-7xl font-extrabold text-white leading-[1.05] mb-8 tracking-tight" dangerouslySetInnerHTML={{ __html: hero.mainHeading || 'Elevate Your <span class="text-transparent bg-clip-text bg-gradient-to-r from-primary-400 to-accent-400">Digital Lifestyle</span>' }}>
+                        <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold text-white leading-[1.05] mb-6 sm:mb-8 tracking-tight" dangerouslySetInnerHTML={{ __html: hero.mainHeading || 'Elevate Your <span class="text-transparent bg-clip-text bg-gradient-to-r from-primary-400 to-accent-400">Digital Lifestyle</span>' }}>
                         </h1>
-                        <p className="text-lg md:text-xl text-slate-400 mb-12 leading-relaxed max-w-xl font-medium">
+                        <p className="text-base sm:text-lg md:text-xl text-slate-400 mb-8 sm:mb-12 leading-relaxed max-w-xl font-medium">
                             {hero.subHeading || 'Curated tech and lifestyle essentials designed for the modern world. Experience precision and quality in every detail.'}
                         </p>
                         <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center">
@@ -196,18 +196,18 @@ const Home: React.FC = () => {
                                     <div className="inline-block px-5 py-2 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-white text-xs font-extrabold uppercase tracking-widest mb-8">
                                         Special Campaign
                                     </div>
-                                    <h2 className="text-5xl md:text-7xl font-extrabold text-white mb-8 tracking-tight leading-[1.05]">
+                                    <h2 className="text-4xl sm:text-5xl md:text-7xl font-extrabold text-white mb-6 sm:mb-8 tracking-tight leading-[1.05]">
                                         {promo.title} <br />
-                                        <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary-400 to-accent-400 font-mono scale-110 inline-block px-4 mx-2 border-b-4 border-accent-500/50 mt-4 leading-normal">{promo.discountPercentage}% OFF</span>
+                                        <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary-400 to-accent-400 font-mono sm:scale-110 inline-block px-4 mx-2 border-b-4 border-accent-500/50 mt-4 leading-normal">{promo.discountPercentage}% OFF</span>
                                     </h2>
-                                    <p className="text-lg md:text-xl text-slate-300 mb-12 font-medium max-w-xl">
+                                    <p className="text-base sm:text-lg md:text-xl text-slate-300 mb-8 sm:mb-12 font-medium max-w-xl">
                                         Take <span className="text-white font-bold">{promo.discountPercentage}% OFF</span> ending soon! <br className="hidden md:block" />
                                         Valid on select premium items.
                                     </p>
                                     <div className="flex gap-4">
                                         <button
                                             onClick={() => navigate('/products')}
-                                            className="inline-flex h-16 items-center px-10 bg-white text-surface-950 text-base font-extrabold rounded-2xl shadow-xl transition-all hover:scale-105 active:scale-95"
+                                            className="inline-flex h-14 sm:h-16 items-center px-8 sm:px-10 bg-white text-surface-950 text-sm sm:text-base font-extrabold rounded-2xl shadow-xl transition-all hover:scale-105 active:scale-95"
                                         >
                                             Shop Campaign Offers
                                         </button>

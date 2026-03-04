@@ -86,7 +86,7 @@ export class ProductRepository {
     async reduceStock(id: string, quantity: number): Promise<IProduct | null> {
         return Product.findOneAndUpdate(
             { _id: id, stock: { $gte: quantity } },
-            { $inc: { stock: -quantity, sold: quantity } },
+            { $inc: { stock: -quantity } },
             { new: true }
         );
     }
